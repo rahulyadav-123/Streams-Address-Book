@@ -41,37 +41,51 @@ public class AddressBook {
 	}
 	
 	public void printContact() {
-		System.out.println("Contact Details Are: ");
-		System.out.println("Name 	     : "  + person.getFirstName() + " " + person.getLastName() + "\n"
-                + "Address      : "  + person.getAddress() + "\n"
-                + "City         : "  + person.getCity() + "\n"
-                + "State        : "  + person.getState() + "\n"
-                + "ZipCode      : "  + person.getZip() + "\n"
-                + "MobileNumber : "  + person.getPhonenumber() + "\n"
-                + "EmailId      : "  + person.getEmail() + "\n" );
-		
+		for(int i = 0; i < list.size(); i++) {
+			System.out.println("Contact Details Are: ");
+			System.out.println("Name 	     : "  + person.getFirstName() + " " + person.getLastName() + "\n"
+					+ "Address      : "  + person.getAddress() + "\n"
+					+ "City         : "  + person.getCity() + "\n"
+					+ "State        : "  + person.getState() + "\n"
+					+ "ZipCode      : "  + person.getZip() + "\n"
+					+ "MobileNumber : "  + person.getPhonenumber() + "\n"
+					+ "EmailId      : "  + person.getEmail() + "\n" );
+		}
 	}
 	
 	public void editContact() {
-		System.out.println("Enter the name to edit the contact: ");
+		System.out.println("Enter the First name to edit the contact: ");
 		String editName = sc.next();
+		boolean edited = false;
 		for(int i = 0; i < list.size(); i++) {
 			String name = list.get(i).getFirstName();
 			if(name.equalsIgnoreCase(editName)) {
-				createContact();			
+				createContact();
+				edited = true;
+				break;
 			}
+		}
+		if(!edited) {
+			System.out.println("Name does not exist");
 		}
 	}
 	
 	public void deleteContact() {
-		System.out.println("Enter the name of the person to delete the contact :");
+		System.out.println("Enter the First name of the person to delete the contact :");
 		String deleteName = sc.next();
+		boolean deleted = false;
 		for(int i = 0; i< list.size(); i++) {
 			String name = list.get(i).getFirstName();
 			if(name.equalsIgnoreCase(deleteName)) {
 				list.remove(i);
+				deleted = true;
+				break;
 			}
 		}
+		printContact();		 
+		if (!deleted) {
+	            System.out.println("Name does not exit");
+		 }
 	}
 }
 
