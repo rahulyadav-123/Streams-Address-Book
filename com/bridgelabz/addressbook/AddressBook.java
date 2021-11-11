@@ -3,15 +3,15 @@ package com.bridgelabz.addressbook;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class AddressBook {
-	
 	List<ContactPerson> list = new ArrayList<ContactPerson>();
 	ContactPerson person = new ContactPerson();
 	Scanner sc = new Scanner(System.in);
 	
 	public void addContact() {
-		System.out.println("Enter number of contacts you need to create :");
+		System.out.println("Enter number of person you need to create :");
 		int n = sc.nextInt();
 		for(int i = 0; i < n; i++) {
 			System.out.println("Enter the first name of person");
@@ -44,8 +44,7 @@ public class AddressBook {
 		System.out.println("Enter Email : ");
 		String email = sc.next();
 		person = new ContactPerson(firstName, lastName, address, city, state, zip, phoneNumber, email);
-		list.add(person);
-		printContact();		
+		list.add(person);	
 	}
 	
 	public void printContact() {
@@ -68,13 +67,41 @@ public class AddressBook {
 		for(int i = 0; i < list.size(); i++) {
 			String name = list.get(i).getFirstName();
 			if(name.equalsIgnoreCase(editName)) {
-				createContact();
-				edited = true;
-				break;
+				System.out.println("Choose field you want to Edit:");
+                System.out.println("Enter\n 1.First Name\n 2.Last Name\n 3.City\n 4.State\n 5.Zip Code\n 6.Phone\n 7.Email");
+                switch (sc.nextInt()) {
+                	case 1:
+                		System.out.println("Correct your First Name");
+                		person.setFirstName(sc.next());
+                    break;
+                    case 2:
+                        System.out.println("Correct your Last Name");
+                        person.setLastName(sc.next());
+                        break;
+                    case 3:
+                        System.out.println("Correct your Address");
+                        person.setAddress(sc.next());
+                        break;
+                    case 4:
+                        System.out.println("Correct your City");
+                        person.setCity(sc.next());
+                        break;
+                    case 5:
+                        System.out.println("Correct your State");
+                        person.setState(sc.next());
+                        break;
+                    case 6:
+                        System.out.println("Correct your Zip");
+                        person.setZip(sc.nextInt());
+                        break;
+                    case 7:
+                        System.out.println("Correct your Phone Number");
+                        person.setPhonenumber(sc.nextLong());
+                    case 8:
+                        System.out.println("Correct your Email");
+                        person.setEmail(sc.next());
+                }
 			}
-		}
-		if(!edited) {
-			System.out.println("Name does not exist");
 		}
 	}
 	
@@ -89,37 +116,54 @@ public class AddressBook {
 				deleted = true;
 				break;
 			}
-		}
-		printContact();		 
+		}		 
 		if (!deleted) {
 	            System.out.println("Name does not exit");
 		 }
 	}
-	
-	public void choice() {	
-		while (true) {
-			System.out.println("Enter \n 1 To add The contact \n 2 To edit the contact \n 3 To delete the contact \n 4 to exit");
-            int choice = sc.nextInt();
-            switch (choice) {
-                case 1:
-                    addContact();
-                    break;
-                case 2:
-                    editContact();
-                    break;
-                case 3:
-                    deleteContact();
-                    break;
-                case 4:
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println("Invalid input");
-                    continue;
-            }
-		}
+
+
+	 public void contactBycity() {
+	        System.out.println("Enter Name of City to get Contact List : ");
+	        String city = sc.next();
+	            System.out.print("\nContact list of persons across '"+city+"' is");
+	            list.stream().filter(contactList -> contactList.getCity().equals(city)||contactList.getState().equals(city)).forEach(contactList -> {
+	                System.out.println(contactList.getFirstName()+" "+contactList.getLastName());
+	            });
+	    }
+	 
+	 public void contactBystate() {
+	        System.out.println("Enter Name of State to get Contact List : ");
+	        String state = sc.next();
+	            System.out.print("\nContact list of persons across '"+state+"' is");
+	            list.stream().filter(contactList -> contactList.getCity().equals(state)||contactList.getState().equals(state)).forEach(contactList -> {
+	                System.out.println(contactList.getFirstName()+" "+contactList.getLastName());
+	            });
+	    }
+	 
+	 
+	public void getPersonNameByState(String State) {
+        List<ContactPerson> result  = list.stream().filter(p ->p.getState().equals(State)).collect(Collectors.toList());
+        for(ContactPerson contact: result){
+            System.out.println("First Name: "+contact.getFirstName());
+        }
 	}
+        
+    // Get Person Name by city
+    public void getPersonNameByCity(String cityName) {
+        List<ContactPerson> result  = list.stream().filter(p ->p.getCity().equals(cityName)).collect(Collectors.toList());
+        for(ContactPerson contact: result){
+            System.out.println("First Name: "+contact.getFirstName());
+        }
+    }
+    
+    public void countList() {
+        System.out.println("Enter Name of City or State to get count of Contacts across city or state");
+        String nameCityState = sc.next();
+        var result = new Object() {int count=0;};
+        list.stream().filter(contactList -> contactList.getCity().equals(nameCityState)||contactList.getState().equals(nameCityState)).forEach(contactList -> {
+            result.count++;
+        });
+        System.out.println("Number of contact persons in "+nameCityState+" is : "+result.count);
+    }
 }
-	
-		
-	
